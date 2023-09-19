@@ -1,0 +1,33 @@
+*IIS Kurulum İşlemleri:*
+Application Request Routing Cache ve URL Rewrite extension'ları kurulur.
+ASP.NET Core Hosting Bundle kuulur.
+-
+Uygulama Kurulum İşlemleri:
+Uygulamalar build edildikten sonra
+inetpub\internalapp01 ve inetpub\internalapp02 dizinlerine kurulur.
+Buradan add web site ile yerel iis üzerinde sırayla 8001 ve 8002 portlarından yayın yapacak şekilde yapılandırılır.
+internalapp01 ve internalapp02 host adları hosts dosyasına eklenir.
+--
+Reverse Proxy Kuralları Tanımlama İşlemleri:
+Bu işlem her bir ek uygulama için yeniden yazılacaktır.
+-
+Default Web Site üzerinde IIS/URL Rewrite işlemleri seçilir.
+Actions > Add Rule tıklanır.
+Inbound and Outbound Rules içinde Reverse Proxy seçilir.
+Açılan pencerede ip:port bilgisi girilir örn.: internalapp:8000
+İşlem kaydedilir.
+--
+Kural Düzenleme:
+Requested URL: Match Pattern
+Using: Regular Expressions
+Pattern: internalapp02/*(.*) 
+Ignore Case: checked.
+-
+Action: Rewrite
+Action Rewrite Url: http://internalapp:8000/{R:1}
+Append Query String: checked
+Log Rewritten Url: checked
+Stop processing of ... : checked
+-- 
+Yukarıdaki kural ile urL'deki internalapp:8000 portundaki uygulamaya ulaşmak için ana-url/internalapp/ adresi yazılacak anlamına gelmektedir. IIS diğer dönüşümleri kendisi halletmektedir.
+
